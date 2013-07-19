@@ -13,6 +13,11 @@ import re
 
 branch_re = re.compile(r"^(?!.*/\.)(?!.*\.\.)(?!/)(?!.*//)(?!.*@\{)(?!.*\\)[^\040\177 ~^:?*[]+(?<!\.lock)(?<!/)(?<!\.)$") # http://stackoverflow.com/questions/12093748/how-do-i-check-for-valid-git-branch-names
 
+# TODO: at some point this should be changed to
+# master - currently, however, almost all work will
+# be based on working.
+MASTER_BRANCH = "working"
+
 class GitError(Exception):
     pass
 
@@ -47,7 +52,7 @@ class TicketBranch(Component):
                         error = "branch does not exist"
                     else:
                         try:
-                            master = self._dereference_head("master")
+                            master = self._dereference_head(MASTER_BRANCH)
                             branch = self._dereference_head(branch)
                             common_ancestor = self._common_ancestor(master,branch)
                             if branch == common_ancestor:
@@ -57,7 +62,7 @@ class TicketBranch(Component):
                                 filter = Transformer('//td[@headers="h_branch"]/text()')
                                 stream |= filter.wrap(tag.a(href=req.href.log(revs="%s-%s"%(common_ancestor,branch))))
                         except GitError:
-                            error = "failed to determine common ancestor with master branch"
+                            error = "failed to determine common ancestor with %s branch"%MASTER_BRANCH
 
                     if error:
                         filter = Transformer('//td[@headers="h_branch"]')
