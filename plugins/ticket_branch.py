@@ -15,8 +15,8 @@ branch_re = re.compile(r"^(?!.*/\.)(?!.*\.\.)(?!/)(?!.*//)(?!.*@\{)(?!.*\\)[^\04
 
 # TODO: at some point this should be changed to
 # master - currently, however, almost all work will
-# be based on working.
-MASTER_BRANCH = "working"
+# be based on build_system.
+MASTER_BRANCH = "build_system"
 
 class GitError(Exception):
     pass
